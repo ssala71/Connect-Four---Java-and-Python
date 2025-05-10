@@ -1,8 +1,11 @@
 package ConnectFour;
 import java.awt.Color;
+import java.awt.Font;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 
 public class Frame {
@@ -21,15 +24,24 @@ public class Frame {
         frame.setVisible(true);
         
         //We set the background to a certain color
-        frame.getContentPane().setBackground(new Color(0,40,4));
+        frame.getContentPane().setBackground(new Color(245,245,245));
 
         //Icon image will work on later
-        ImageIcon image = new ImageIcon("logo.png");
+        ImageIcon image = new ImageIcon("/resources/logo.png");
         frame.setIconImage(image.getImage());
 
-        //Adding text
+        //Adding text, color, font, size
         JLabel label = new JLabel();
         label.setText("Connect Four");
+        label.setForeground(new Color(0,0,0));
+        label.setFont(new Font("Times new Roman", Font.PLAIN, 96));
+
+        //Text position
+        label.setVerticalAlignment(SwingConstants.TOP);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+
+        //Change Position
+        label.setBorder(BorderFactory.createEmptyBorder(50,0,0,0));
 
         frame.add(label);
 
