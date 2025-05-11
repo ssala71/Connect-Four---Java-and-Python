@@ -3,17 +3,20 @@ package ConnectFour;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
 
 public class Frame implements ActionListener{
 
+    JFrame frame;
+
     JButton easyButton;
     JButton hardButton;
 
+    boolean isHardMode;
+
     public Frame(){
         //Create a frame object
-        JFrame frame = createFrame();
+        frame = createFrame();
 
         JLabel titleLabel = createTitleLabel();
         frame.add(titleLabel);
@@ -22,9 +25,11 @@ public class Frame implements ActionListener{
         frame.add(subTitleLabel);
 
         easyButton = createEasyButton();
+        easyButton.addActionListener(this);
         frame.add(easyButton);
 
         hardButton = createHardButton();
+        hardButton.addActionListener(this);
         frame.add(hardButton);
 
         frame.setLayout(null);
@@ -55,8 +60,7 @@ public class Frame implements ActionListener{
     private JLabel createTitleLabel(){
         JLabel label = new JLabel("Connect Four");
 
-        //Adding text, color, font, size
-        label.setText("Connect Four");
+        //Adding color, font, size
         label.setForeground(new Color(0,0,0));
         label.setFont(new Font("Arial", Font.BOLD, 100));
 
@@ -100,12 +104,33 @@ public class Frame implements ActionListener{
         return button;
     }
 
-    public void easyButtonPressed(ActionEvent event){
+    public void actionPerformed(ActionEvent e){
+        if (e.getSource() == easyButton){
+            isHardMode = false;
+            System.out.println(1);
+
+            frame.getContentPane().removeAll();
+            
+            frame.getContentPane().add(new GamePanel(isHardMode));
+            frame.revalidate();
+            frame.repaint();
+
+        }
+
+        if (e.getSource() == hardButton){
+            isHardMode = true;
+            System.out.println(2);
+
+            frame.getContentPane().removeAll();
+            
+            frame.getContentPane().add(new GamePanel(isHardMode));
+            frame.revalidate();
+            frame.repaint();
+            
+
+            
+        }
         
-    }
-
-    public void hardButtonPressed(ActionEvent event){
-
     }
 
     public static void main(String[] args) {
