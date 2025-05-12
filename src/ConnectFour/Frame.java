@@ -11,12 +11,15 @@ public class Frame implements ActionListener{
 
     JButton easyButton;
     JButton hardButton;
+    JButton humanButton;
 
     boolean isHardMode;
 
     public Frame(){
         //Create a frame object
         frame = createFrame();
+
+        BorderLayout border = new BorderLayout();
 
         JLabel titleLabel = createTitleLabel();
         frame.add(titleLabel);
@@ -32,9 +35,12 @@ public class Frame implements ActionListener{
         hardButton.addActionListener(this);
         frame.add(hardButton);
 
-        frame.setLayout(null);
-        frame.setVisible(true);
+        humanButton = createHumanButton();
+        humanButton.addActionListener(this);
+        frame.add(humanButton);
 
+        frame.setLayout(border);
+        frame.setVisible(true);
 
     }
 
@@ -88,6 +94,8 @@ public class Frame implements ActionListener{
 
     private JButton createEasyButton(){
         JButton button = new JButton("Easy");
+        button.setBackground(new Color(255,255,255));
+
         button.setBounds(180, 350, 1200, 125); 
         button.setFont(new Font("Arial", Font.BOLD, 36));
         button.setFocusPainted(false);
@@ -97,7 +105,20 @@ public class Frame implements ActionListener{
 
     private JButton createHardButton(){
         JButton button = new JButton("Hard");
+        button.setBackground(new Color(255,255,255));
+
         button.setBounds(180, 500, 1200, 125); 
+        button.setFont(new Font("Arial", Font.BOLD, 36));
+        button.setFocusPainted(false);
+
+        return button;
+    }
+
+    private JButton createHumanButton(){
+        JButton button = new JButton("vs Human");
+        button.setBackground(new Color(255,255,255));
+
+        button.setBounds(180, 650, 1200, 125); 
         button.setFont(new Font("Arial", Font.BOLD, 36));
         button.setFocusPainted(false);
 
@@ -127,9 +148,21 @@ public class Frame implements ActionListener{
             frame.revalidate();
             frame.repaint();
             
-
-            
         }
+
+        if (e.getSource() == humanButton){
+            isHardMode = false;
+            System.out.println(3);
+
+            frame.getContentPane().removeAll();
+            
+            frame.getContentPane().add(new GamePanel(isHardMode));
+            frame.revalidate();
+            frame.repaint();
+
+        }
+
+
         
     }
 
