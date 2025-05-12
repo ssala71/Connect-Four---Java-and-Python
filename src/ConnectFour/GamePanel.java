@@ -8,28 +8,30 @@ import java.awt.event.MouseListener;
 import javax.swing.*;
 
 
-
-
-
 public class GamePanel extends JPanel implements MouseListener{
+    //Created colors to reference later
     public static Color RectColor = new Color(3,4,170);
     public static Color YellowColor = new Color(220,220,0);
     public static Color RedColor = new Color(250,0,10);
 
+    //Position of Board
     public static int RectX = 300;
     public static int RectY = 75;
     public static int RectWidth = 1000;
     public static int RectHeight = 800;
 
+    //True or false conditions of whether it should use hard AI or if person won
     private boolean isHardMode;
+    private boolean winCondition = false;
 
     JButton backButton;
     JFrame frame;
 
+    //current player initialized and the board
     int[][] board = new int[6][7];
     int currentPlayer = 1;
 
-
+    
     public GamePanel(boolean isHardMode){
         this.isHardMode = isHardMode;
         
@@ -93,7 +95,7 @@ public class GamePanel extends JPanel implements MouseListener{
                     default:
                         break;
                 }
-                System.out.println("Drawing cell [" + j + "][" + i + "] = " + board[j][i]);
+                //System.out.println("Drawing cell [" + j + "][" + i + "] = " + board[j][i]);
                 graphics.fillOval(312 + i * 143, 90 + 130 * j,120, 120);
             }
         }
@@ -123,12 +125,12 @@ public class GamePanel extends JPanel implements MouseListener{
                 board[row][column] = currentPlayer;
                 if (currentPlayer == 1) {
                     currentPlayer = 2;
-                    System.out.println("Dropped at row " + row + ", col " + column + ", by player " + currentPlayer);
+                    //System.out.println("Dropped at row " + row + ", col " + column + ", by player " + currentPlayer);
                     break;
 
                 } else {
                     currentPlayer = 1;
-                    System.out.println("Dropped at row " + row + ", col " + column + ", by player " + currentPlayer);
+                    //System.out.println("Dropped at row " + row + ", col " + column + ", by player " + currentPlayer);
                     break;
                 }
             }
@@ -136,20 +138,95 @@ public class GamePanel extends JPanel implements MouseListener{
         repaint();
     }
     
+    public void checkWinCondition(){
+        //We want to check up, rights and diagonals
+        //YEAH THIS SHIT WORKS
+        checkHorizontalWin();
+
+        //THIS ONE TOO
+        checkVerticalWin();
+
+
+        checkUpDiagonalWin();
+
+        //This one WORKS?
+        checkDownDiagonalWin();
+
+        
+    }
+
+    public void checkVerticalWin(){
+        //Gonna be 7 and 3 for i and j
+        //int[6][7]
+        for (int i = 0; i < 7; i++){
+            for (int j = 0; j < 3; j++){
+                if (board[j][i] == 1 && board[j+1][i] == 1 && board[j+2][i] == 1 && board[j+3][i] == 1||
+                    board[j][i] == 2 && board[j+1][i] == 2 && board[j+2][i] == 2 && board[j+3][i] == 2){
+                        System.out.println("You win!!!!!");
+                        winCondition = true;
+                        return;
+                }
+            }
+        }
+    }
+
+    public void checkHorizontalWin(){
+        for (int i = 0; i < 4; i++){
+            for (int j = 0; j < 6; j++){
+                if (board[j][i] == 1 && board[j][i+1] == 1 && board[j][i+2] == 1 && board[j][i+3] == 1||
+                    board[j][i] == 2 && board[j][i+1] == 2 && board[j][i+2] == 2 && board[j][i+3] == 2){
+                        System.out.println("You win!!!!!");
+                        winCondition = true;
+                        return;
+                }
+
+            }
+        }
+    }
+
+    public void checkDownDiagonalWin(){
+        for (int i = 0; i < 4; i++){
+            for (int j = 0; j < 3; j++){
+                if (board[j][i] == 1 && board[j+1][i+1] == 1 && board[j+2][i+2] == 1 && board[j+3][i+3] == 1||
+                    board[j][i] == 2 && board[j+1][i+1] == 2 && board[j+2][i+2] == 2 && board[j+3][i+3] == 2){
+                        System.out.println("WON");
+                        winCondition = true;
+                        return;
+                }
+            }
+            
+        }
+    }
+
+    public void checkUpDiagonalWin(){
+        for (int i = 0; i < 6; i++){
+            for (int k = 5; k > 2; k--){
+                if (board[k][i] == 1 && board[k-1][i+1] == 1 && board[k-2][i+2] == 1 && board[k-3][i+3] == 1||
+                        board[k][i] == 2 && board[k-1][i+1] == 2 && board[k-2][i+2] == 2 && board[k-3][i+3] == 2){
+                            winCondition = true;
+                            return;
+                    }
+                }
+        }
+    }
     @Override
     public void mouseClicked(MouseEvent e) {
         // TODO Auto-generated method stub
-        if (e.getX() >= 300 && e.getX() <= 1300 && e.getY() > 77 && e.getY() < 872){
-            int column = (e.getX() - 300)/ 143;
-            int row = (e.getY() - 75)/130;
-        
-            dropDown(column);
-            repaint();
+    
+        checkWinCondition();
+            if (winCondition == false && e.getX() >= 300 && e.getX() <= 1300 && e.getY() > 77 && e.getY() < 872){
+                int column = (e.getX() - 300)/ 143;
+                int row = (e.getY() - 75)/130;
 
+                        dropDown(column);
+                        repaint();
+
+                }
+            if (winCondition == true){
+                System.out.println("You won");
             }
-
-
-        }
+            
+    }
 
     @Override
     public void mousePressed(MouseEvent e) {}
