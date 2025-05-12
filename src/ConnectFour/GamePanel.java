@@ -1,14 +1,16 @@
 package ConnectFour;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.security.cert.LDAPCertStoreParameters;
+
 import javax.swing.*;
+
+
 
 public class GamePanel extends JPanel implements MouseListener{
     public static Color RectColor = new Color(3,4,170);
@@ -21,15 +23,37 @@ public class GamePanel extends JPanel implements MouseListener{
     public static int RectHeight = 800;
 
     private boolean isHardMode;
+
+    JButton backButton;
     JLabel label;
+    JFrame frame;
+    ActionListener al;
 
     int[][] board = new int[6][7];
 
     public GamePanel(boolean isHardMode){
         this.isHardMode = isHardMode;
-
+        this.frame = frame;
+        
         label = new JLabel();
         label.addMouseListener(this);
+
+        setLayout(null);
+
+
+        backButton = backButton();
+        backButton.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+        frame.setContentPane(new MenuPanel());
+        
+        frame.revalidate();
+        frame.repaint();
+    }
+});
+
+        this.add(backButton);
 
         setBackground(new Color(200,200,200));
         this.setPreferredSize(new Dimension(1920, 1080));
@@ -71,6 +95,20 @@ public class GamePanel extends JPanel implements MouseListener{
 
 
     }
+    
+    private JButton backButton(){
+        JButton button = new JButton("Back");
+        button.setBackground(new Color(255,255,255));
+
+        button.setBounds(0, 10, 250, 50); 
+        button.setFont(new Font("Arial", Font.BOLD, 36));
+        button.setFocusPainted(false);
+
+        return button;
+    }
+    
+    
+
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -82,6 +120,18 @@ public class GamePanel extends JPanel implements MouseListener{
                 case 0:
 
                 case 1:
+
+                case 2:
+
+                case 3:
+
+                case 4:
+
+                case 5:
+
+                case 6:
+
+
             }
 
 

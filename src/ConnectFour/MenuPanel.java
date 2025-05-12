@@ -5,8 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class Frame implements ActionListener{
+public class MenuPanel extends JPanel implements ActionListener{
 
+    
     JFrame frame;
 
     JButton easyButton;
@@ -15,7 +16,7 @@ public class Frame implements ActionListener{
 
     boolean isHardMode;
 
-    public Frame(){
+    public MenuPanel(){
         //Create a frame object
         frame = createFrame();
 
@@ -62,6 +63,7 @@ public class Frame implements ActionListener{
 
         return frame;
     }
+
 
     private JLabel createTitleLabel(){
         JLabel label = new JLabel("Connect Four");
@@ -166,8 +168,8 @@ public class Frame implements ActionListener{
         
     }
 
-    public static void main(String[] args) {
-        new Frame();
+    public static void main(String[] args){
+        new MenuPanel();
     }
 
 
