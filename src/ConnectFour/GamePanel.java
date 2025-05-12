@@ -3,12 +3,11 @@ package ConnectFour;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.security.cert.LDAPCertStoreParameters;
-
 import javax.swing.*;
+
+
 
 
 
@@ -25,18 +24,16 @@ public class GamePanel extends JPanel implements MouseListener{
     private boolean isHardMode;
 
     JButton backButton;
-    JLabel label;
     JFrame frame;
-    ActionListener al;
 
     int[][] board = new int[6][7];
+    int currentPlayer = 1;
+
 
     public GamePanel(boolean isHardMode){
         this.isHardMode = isHardMode;
-        this.frame = frame;
         
-        label = new JLabel();
-        label.addMouseListener(this);
+        addMouseListener(this);
 
         setLayout(null);
 
@@ -45,6 +42,8 @@ public class GamePanel extends JPanel implements MouseListener{
         backButton.addActionListener(new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent e) {
+
+        frame = (JFrame) SwingUtilities.getWindowAncestor(GamePanel.this);
 
         frame.setContentPane(new MenuPanel());
         
@@ -81,14 +80,20 @@ public class GamePanel extends JPanel implements MouseListener{
 
         for (int i = 0; i < 7; i++){
             for (int j = 0; j < 6; j++){
-                if (board[j][i] == 0) {
-                    graphics.setColor(Color.WHITE);
-                } else if (board[j][i] == 1) {
-                    graphics.setColor(Color.RED);
-                } else if (board[j][i] == 2) {
-                    graphics.setColor(Color.YELLOW);
+                switch (board[j][i]) {
+                    case 0:
+                        graphics.setColor(Color.WHITE);
+                        break;
+                    case 1:
+                        graphics.setColor(Color.RED);
+                        break;
+                    case 2:
+                        graphics.setColor(Color.YELLOW);
+                        break;
+                    default:
+                        break;
                 }
-
+                System.out.println("Drawing cell [" + j + "][" + i + "] = " + board[j][i]);
                 graphics.fillOval(312 + i * 143, 90 + 130 * j,120, 120);
             }
         }
@@ -107,39 +112,57 @@ public class GamePanel extends JPanel implements MouseListener{
         return button;
     }
     
+
+    public void dropDown(int column){
+        //check if row is empty if empty then it inserts, if not keeps going until not empty
+        //Case where does nothing if row is full
+
+        for (int row = 5; row >= 0; row--) {
+            if (board[row][column] == 0){
+                //Probably check if its either player one or player two then repaint circle
+                board[row][column] = currentPlayer;
+                if (currentPlayer == 1) {
+                    currentPlayer = 2;
+                    System.out.println("Dropped at row " + row + ", col " + column + ", by player " + currentPlayer);
+                    break;
+
+                } else {
+                    currentPlayer = 1;
+                    System.out.println("Dropped at row " + row + ", col " + column + ", by player " + currentPlayer);
+                    break;
+                }
+            }
+        }
+        repaint();
+    }
     
-
-
     @Override
     public void mouseClicked(MouseEvent e) {
         // TODO Auto-generated method stub
         if (e.getX() >= 300 && e.getX() <= 1300 && e.getY() > 77 && e.getY() < 872){
             int column = (e.getX() - 300)/ 143;
-
-            switch(column){
-                case 0:
-
-                case 1:
-
-                case 2:
-
-                case 3:
-
-                case 4:
-
-                case 5:
-
-                case 6:
-
+            int row = (e.getY() - 75)/130;
+        
+            dropDown(column);
+            repaint();
 
             }
 
 
         }
-        
 
-        
-    }
+    @Override
+    public void mousePressed(MouseEvent e) {}
+
+    @Override
+    public void mouseReleased(MouseEvent e) {    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {    }
+
     
 
 }
