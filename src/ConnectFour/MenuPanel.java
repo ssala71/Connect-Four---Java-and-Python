@@ -57,7 +57,7 @@ public class MenuPanel extends JPanel implements ActionListener{
         frame.getContentPane().setBackground(new Color(200,200,200));
 
         //Icon image will work on later
-        ImageIcon image = new ImageIcon("C:\\Users\\ssala\\Downloads\\CS46B Folder\\Connect Four Game\\src\\resources\\logo.png");
+        ImageIcon image = new ImageIcon("C:\\Users\\ssala\\Downloads\\Coding\\Connect4\\src\\images\\logo.png");
         frame.setIconImage(image.getImage());
 
 

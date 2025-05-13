@@ -31,7 +31,7 @@ public class GamePanel extends JPanel implements MouseListener{
     int[][] board = new int[6][7];
     int currentPlayer = 1;
 
-    
+    //Constructor with isHardMode variable used to dictate what AI to use depending on selection
     public GamePanel(boolean isHardMode){
         this.isHardMode = isHardMode;
         
@@ -78,8 +78,7 @@ public class GamePanel extends JPanel implements MouseListener{
         }
         graphics.drawLine(300,872,1300,872);
 
-        graphics.setColor(Color.WHITE);
-
+        //Checks with board to see what color to change it to        
         for (int i = 0; i < 7; i++){
             for (int j = 0; j < 6; j++){
                 switch (board[j][i]) {
@@ -103,6 +102,7 @@ public class GamePanel extends JPanel implements MouseListener{
 
     }
     
+    //Button to go back to menu
     private JButton backButton(){
         JButton button = new JButton("Back");
         button.setBackground(new Color(255,255,255));
@@ -138,23 +138,20 @@ public class GamePanel extends JPanel implements MouseListener{
         repaint();
     }
     
+    //Helper Methods to make debugging easier, for any if cases where opponent loses
     public void checkWinCondition(){
         //We want to check up, rights and diagonals
-        //YEAH THIS SHIT WORKS
         checkHorizontalWin();
 
-        //THIS ONE TOO
         checkVerticalWin();
-
 
         checkUpDiagonalWin();
 
-        //This one WORKS?
         checkDownDiagonalWin();
 
-        
     }
 
+    //First helper method that checks if someone won by stacking pieces
     public void checkVerticalWin(){
         //Gonna be 7 and 3 for i and j
         //int[6][7]
@@ -170,6 +167,7 @@ public class GamePanel extends JPanel implements MouseListener{
         }
     }
 
+    //Second helper method that checks if someone won by lining pieces together, horizontally
     public void checkHorizontalWin(){
         for (int i = 0; i < 4; i++){
             for (int j = 0; j < 6; j++){
@@ -183,7 +181,7 @@ public class GamePanel extends JPanel implements MouseListener{
             }
         }
     }
-
+    //Third helper method, starts at top left then goes down right looking for pieces that won diagonally down
     public void checkDownDiagonalWin(){
         for (int i = 0; i < 4; i++){
             for (int j = 0; j < 3; j++){
@@ -198,8 +196,9 @@ public class GamePanel extends JPanel implements MouseListener{
         }
     }
 
+    //Last helper method, begins at bottome left that iterates to see if its possible that someone won diagonally up
     public void checkUpDiagonalWin(){
-        for (int i = 0; i < 6; i++){
+        for (int i = 0; i < 4; i++){
             for (int k = 5; k > 2; k--){
                 if (board[k][i] == 1 && board[k-1][i+1] == 1 && board[k-2][i+2] == 1 && board[k-3][i+3] == 1||
                         board[k][i] == 2 && board[k-1][i+1] == 2 && board[k-2][i+2] == 2 && board[k-3][i+3] == 2){
@@ -209,9 +208,12 @@ public class GamePanel extends JPanel implements MouseListener{
                 }
         }
     }
+
     @Override
     public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
+        //Whenever a mouse is clicked, it checks if game is over,
+        //If game is over then it prints you won, used for debugging
+        //If not, and if its within the axis of the baord then it drops the coin to lowest slot and repaints
     
         checkWinCondition();
             if (winCondition == false && e.getX() >= 300 && e.getX() <= 1300 && e.getY() > 77 && e.getY() < 872){
