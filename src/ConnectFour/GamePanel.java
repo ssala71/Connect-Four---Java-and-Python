@@ -259,13 +259,6 @@ public class GamePanel extends JPanel implements MouseListener{
                         dropDown(column);
 
                         checkWinCondition();
-                        
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e1) {
-                            // TODO Auto-generated catch block
-                            e1.printStackTrace();
-                        }
 
                         if (!isHuman && currentPlayer == 2 && !winCondition) {
                             int AImove = getAI();
