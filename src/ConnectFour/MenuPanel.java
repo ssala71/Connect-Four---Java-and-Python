@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import java.lang.Math.*;
+import org.python.util.PythonInterpreter;
 
 public class MenuPanel extends JPanel implements ActionListener{
 
@@ -15,6 +17,7 @@ public class MenuPanel extends JPanel implements ActionListener{
     JButton humanButton;
 
     boolean isHardMode;
+    boolean isHuman;
 
     public MenuPanel(){
         //Create a frame object
@@ -130,11 +133,11 @@ public class MenuPanel extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e){
         if (e.getSource() == easyButton){
             isHardMode = false;
-            System.out.println(1);
+            isHuman = false;
 
             frame.getContentPane().removeAll();
             
-            frame.getContentPane().add(new GamePanel(isHardMode));
+            frame.getContentPane().add(new GamePanel(isHardMode,isHuman));
             frame.revalidate();
             frame.repaint();
 
@@ -142,11 +145,11 @@ public class MenuPanel extends JPanel implements ActionListener{
 
         if (e.getSource() == hardButton){
             isHardMode = true;
-            System.out.println(2);
+            isHuman = false;
 
             frame.getContentPane().removeAll();
             
-            frame.getContentPane().add(new GamePanel(isHardMode));
+            frame.getContentPane().add(new GamePanel(isHardMode, isHuman));
             frame.revalidate();
             frame.repaint();
             
@@ -154,11 +157,11 @@ public class MenuPanel extends JPanel implements ActionListener{
 
         if (e.getSource() == humanButton){
             isHardMode = false;
-            System.out.println(3);
+            isHuman = true;
 
             frame.getContentPane().removeAll();
             
-            frame.getContentPane().add(new GamePanel(isHardMode));
+            frame.getContentPane().add(new GamePanel(isHardMode, isHuman));
             frame.revalidate();
             frame.repaint();
 

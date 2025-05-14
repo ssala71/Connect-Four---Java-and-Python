@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.*;
+import org.python.util.PythonInterpreter;
+import java.util.concurrent.TimeUnit;
 
 
 public class GamePanel extends JPanel implements MouseListener{
@@ -22,6 +24,7 @@ public class GamePanel extends JPanel implements MouseListener{
 
     //True or false conditions of whether it should use hard AI or if person won
     private boolean isHardMode;
+    private boolean isHuman;
     private boolean winCondition = false;
 
     JButton backButton;
@@ -32,8 +35,18 @@ public class GamePanel extends JPanel implements MouseListener{
     int currentPlayer = 1;
 
     //Constructor with isHardMode variable used to dictate what AI to use depending on selection
-    public GamePanel(boolean isHardMode){
+    public GamePanel(boolean isHardMode, boolean isHuman){
         this.isHardMode = isHardMode;
+        this.isHuman = isHuman;
+
+        if (!isHuman){
+            if (isHardMode){
+                //put wtv for hard mode
+            }
+            else{
+                //put wtv for easy mode
+            }
+        }
         
         addMouseListener(this);
 
@@ -209,6 +222,29 @@ public class GamePanel extends JPanel implements MouseListener{
         }
     }
 
+    public int getAI(){
+        //Easy mode AI done in java
+        if (!isHardMode){
+            int rand = (int) (Math.random() * 7);
+            //if full then do back throuhg getAI()
+            while (board[0][rand] == 1 || board[0][rand] == 2){
+                rand = (int) (Math.random() * 7);
+                if (board[0][rand] == 1 || board[0][rand] == 2){
+                    continue;
+                }
+                return rand;
+            }
+
+            return rand;
+
+            
+        }
+        else{
+            //filer for hard for now
+            return 2;
+        }
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
         //Whenever a mouse is clicked, it checks if game is over,
@@ -221,7 +257,20 @@ public class GamePanel extends JPanel implements MouseListener{
                 int row = (e.getY() - 75)/130;
 
                         dropDown(column);
-                        repaint();
+
+                        checkWinCondition();
+                        
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+
+                        if (!isHuman && currentPlayer == 2 && !winCondition) {
+                            int AImove = getAI();
+                            dropDown(AImove);
+                    }
 
                 }
             if (winCondition == true){
