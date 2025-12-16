@@ -172,7 +172,7 @@ public class MenuPanel extends JPanel implements ActionListener{
     }
 
     public static void main(String[] args){
-        new MenuPanel();
+        MenuPanel p = new MenuPanel();
     }
 
 

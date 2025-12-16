@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.*;
-import org.python.util.PythonInterpreter;
 import java.util.concurrent.TimeUnit;
 
 
@@ -23,9 +22,9 @@ public class GamePanel extends JPanel implements MouseListener{
     public static int RectHeight = 800;
 
     //True or false conditions of whether it should use hard AI or if person won
-    private boolean isHardMode;
-    private boolean isHuman;
-    private boolean winCondition = false;
+    protected boolean isHardMode;
+    protected boolean isHuman;
+    protected boolean winCondition = false;
 
     JButton backButton;
     JFrame frame;
@@ -59,8 +58,8 @@ public class GamePanel extends JPanel implements MouseListener{
     public void actionPerformed(ActionEvent e) {
 
         frame = (JFrame) SwingUtilities.getWindowAncestor(GamePanel.this);
-
-        frame.setContentPane(new MenuPanel());
+        MenuPanel p = new MenuPanel();
+        frame.setContentPane(p);
         
         frame.revalidate();
         frame.repaint();
@@ -154,96 +153,10 @@ public class GamePanel extends JPanel implements MouseListener{
     //Helper Methods to make debugging easier, for any if cases where opponent loses
     public void checkWinCondition(){
         //We want to check up, rights and diagonals
-        checkHorizontalWin();
-
-        checkVerticalWin();
-
-        checkUpDiagonalWin();
-
-        checkDownDiagonalWin();
+        GameLogic(isHardMode, isHuman);
 
     }
 
-    //First helper method that checks if someone won by stacking pieces
-    public void checkVerticalWin(){
-        //Gonna be 7 and 3 for i and j
-        //int[6][7]
-        for (int i = 0; i < 7; i++){
-            for (int j = 0; j < 3; j++){
-                if (board[j][i] == 1 && board[j+1][i] == 1 && board[j+2][i] == 1 && board[j+3][i] == 1||
-                    board[j][i] == 2 && board[j+1][i] == 2 && board[j+2][i] == 2 && board[j+3][i] == 2){
-                        System.out.println("You win!!!!!");
-                        winCondition = true;
-                        return;
-                }
-            }
-        }
-    }
-
-    //Second helper method that checks if someone won by lining pieces together, horizontally
-    public void checkHorizontalWin(){
-        for (int i = 0; i < 4; i++){
-            for (int j = 0; j < 6; j++){
-                if (board[j][i] == 1 && board[j][i+1] == 1 && board[j][i+2] == 1 && board[j][i+3] == 1||
-                    board[j][i] == 2 && board[j][i+1] == 2 && board[j][i+2] == 2 && board[j][i+3] == 2){
-                        System.out.println("You win!!!!!");
-                        winCondition = true;
-                        return;
-                }
-
-            }
-        }
-    }
-    //Third helper method, starts at top left then goes down right looking for pieces that won diagonally down
-    public void checkDownDiagonalWin(){
-        for (int i = 0; i < 4; i++){
-            for (int j = 0; j < 3; j++){
-                if (board[j][i] == 1 && board[j+1][i+1] == 1 && board[j+2][i+2] == 1 && board[j+3][i+3] == 1||
-                    board[j][i] == 2 && board[j+1][i+1] == 2 && board[j+2][i+2] == 2 && board[j+3][i+3] == 2){
-                        System.out.println("WON");
-                        winCondition = true;
-                        return;
-                }
-            }
-            
-        }
-    }
-
-    //Last helper method, begins at bottome left that iterates to see if its possible that someone won diagonally up
-    public void checkUpDiagonalWin(){
-        for (int i = 0; i < 4; i++){
-            for (int k = 5; k > 2; k--){
-                if (board[k][i] == 1 && board[k-1][i+1] == 1 && board[k-2][i+2] == 1 && board[k-3][i+3] == 1||
-                        board[k][i] == 2 && board[k-1][i+1] == 2 && board[k-2][i+2] == 2 && board[k-3][i+3] == 2){
-                            winCondition = true;
-                            return;
-                    }
-                }
-        }
-    }
-
-    public int getAI(){
-        //Easy mode AI done in java
-        if (!isHardMode){
-            int rand = (int) (Math.random() * 7);
-            //if full then do back throuhg getAI()
-            while (board[0][rand] == 1 || board[0][rand] == 2){
-                rand = (int) (Math.random() * 7);
-                if (board[0][rand] == 1 || board[0][rand] == 2){
-                    continue;
-                }
-                return rand;
-            }
-
-            return rand;
-
-            
-        }
-        else{
-            //filer for hard for now
-            return 2;
-        }
-    }
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -261,8 +174,9 @@ public class GamePanel extends JPanel implements MouseListener{
                         checkWinCondition();
 
                         if (!isHuman && currentPlayer == 2 && !winCondition) {
-                            int AImove = getAI();
-                            dropDown(AImove);
+                            AIMove ai = new AIMove(isHardMode, isHuman);
+                            int x = ai.getAI(isHardMode);
+                            dropDown(x);
                     }
 
                 }
@@ -283,6 +197,7 @@ public class GamePanel extends JPanel implements MouseListener{
 
     @Override
     public void mouseExited(MouseEvent e) {    }
+
 
     
 
